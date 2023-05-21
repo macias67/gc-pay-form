@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Pago</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+  <section class="section">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-half">
+          <div class="card">
+            <form id="formPay" class="card-content">
+              <h1 class="title is-4 has-text-centered">Formulario de Pago</h1>
+              <div class="field">
+                <label for="cardHolder" class="label">Nombre del Titular</label>
+                <div class="control">
+                    <input id="cardHolder" class="input" type="text" placeholder="Ingresa el nombre del titular">
+                </div>
+              </div>
+                <div class="field">
+                    <label for="email" class="label">Email</label>
+                    <div class="control">
+                        <input id="email" class="input" type="text" placeholder="Email">
+                    </div>
+                </div>
+              <div class="field">
+                <label for="cardNumber" class="label">Número de Tarjeta</label>
+                <div class="control">
+                    <input id="cardNumber"
+                           maxlength="19"
+                           class="input is-large"
+                           type="text"
+                           inputmode="numeric"
+                           placeholder="XXXX XXXX XXXX XXXX"
+                           autocomplete="off"
+                    />
+                </div>
+              </div>
+              <div class="columns">
+                <div class="column field is-6">
+                  <label for="expirationDate" class="label">Fecha de Caducidad</label>
+                  <div class="control">
+                    <input id="expirationDate" class="input" type="text" placeholder="MM/AA">
+                  </div>
+                </div>
+                <div class="column field is-6">
+                  <label for="securityCode" class="label">CVV</label>
+                  <div class="control">
+                    <input id="securityCode"
+                           class="input"
+                           type="text"
+                           inputmode="numeric"
+                           pattern="\d*"
+                           maxlength="3"
+                           placeholder="Ingresa el CVV">
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label for="amount" class="label">Monto</label>
+                <div class="control">
+                  <input id="amount" class="input" type="text" placeholder="Ingresa el monto">
+                </div>
+              </div>
+              <div class="field is-grouped">
+                <div class="control">
+                  <button id="payButton" class="button is-primary">Pagar</button>
+                </div>
+                <div class="control">
+                  <button id="cancelButton" class="button is-link">Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <script src="app.js"></script>
+</body>
+</html>
