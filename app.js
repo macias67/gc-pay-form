@@ -1,5 +1,7 @@
+// lmacias
 const mp = new MercadoPago('TEST-4a16bdf0-7a39-4a66-aab5-480ae9177361');
 
+// const mp = new MercadoPago('TEST-d8c0b5ac-64c7-4e9a-9dbe-edbf0d4c16c7');
 const formData = {}
 
 
@@ -59,7 +61,7 @@ const expirationDateFormat = () => {
 const securityCodeFormat = () => {
   securityCode.value = securityCode.value
       .replace(/[^\d]/g, "") // Eliminar caracteres no numéricos
-      .substring(0, 3) // Solo tomar los primeros 3 dígitos
+      .substring(0, 4) // Solo tomar los primeros 4 dígitos
 }
 
 const amountFormat = () => {
@@ -88,11 +90,14 @@ const complementsHandler = async () => {
   const bin = getBIN(vCardNumber);
   const { results } = await mp.getPaymentMethods({ bin });
 
-  const issuers = results[0].issuer
-  const paymentTypeId = results[0].payment_type_id
+  console.log(results);
 
-  formData.issuer = [{id: issuers.id}]
-  formData.payment_type_id = [{id: paymentTypeId}]
+  const issuers = results[0].issuer;
+  const paymentTypeId = results[0].payment_type_id;
+
+  formData.payment_method_id = results[0].id;
+  formData.issuer_id = issuers.id;
+  formData.payment_type_id = [{id: paymentTypeId}];
 }
 
 const paymentHandler = async () => {
@@ -102,6 +107,14 @@ const paymentHandler = async () => {
   const vExpirationDate = expirationDate.value.split("/");
   const vSecurityCode = securityCode.value;
   const vAmount = amount.value;
+
+  console.log({
+    cardNumber: vCardNumber,
+    cardholderName: vCardHolder,
+    cardExpirationMonth: vExpirationDate[0],
+    cardExpirationYear: vExpirationDate[1],
+    securityCode: vSecurityCode,
+  });
 
   // Create token
   const token = await mp.createCardToken({
@@ -114,7 +127,7 @@ const paymentHandler = async () => {
 
   formData.email = vEmail
   formData.token = token.id
-  formData.amount = vAmount
+  formData.transaction_amount = vAmount
 
   console.log(JSON.stringify(formData))
 
