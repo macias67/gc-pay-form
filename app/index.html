@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupo Capitolio - Formulario de Pago</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body>
+<section id="cardSection" class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <h1 class="title is-4 has-text-centered">Estarás realizando un pago por $300.00 MXN</h1>
+                <div class="card">
+                    <div id="cardPaymentBrick_container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="statusSection" class="section is-hidden">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <div class="card">
+                    <div id="statusScreenBrick_container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script src="https://grupocapitolio.com/pay/app.min.js"></script>
+</body>
+</html>

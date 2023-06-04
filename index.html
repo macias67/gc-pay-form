@@ -1,41 +1,15 @@
-<!DOCTYPE html>
+<!doctypehtml>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grupo Capitolio - Formulario de Pago</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-</head>
-<body>
-<p>
-    <code>
-        Mastercard - 5474 9254 3267 0366	- 123 - 11/25
-    </code>
-</p>
-
-<p>
-    <code>
-        Visa -	4075 5957 1648 3764 - 123 - 11/25
-    </code>
-</p>
-
-<p>
-    <code>
-        test_user_632256697@testuser.com
-    </code>
-</p>
-
-<p>
-    <code>
-        katlyn07@gmail.com
-    </code>
-</p>
-
-<section id="cardSection" class="section">
+<meta charset="UTF-8">
+<meta content="width=device-width,initial-scale=1" name="viewport">
+<title>Grupo Capitolio - Formulario de Pago</title>
+<link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+<section class="section" id="cardSection">
     <div class="container">
         <div class="columns is-centered">
-            <div class="column is-half">
+            <div class="column is-half"><h1 class="has-text-centered is-4 title">Estarás realizando un pago por $300.00
+                MXN</h1>
                 <div class="card">
                     <div id="cardPaymentBrick_container"></div>
                 </div>
@@ -43,8 +17,7 @@
         </div>
     </div>
 </section>
-
-<section id="statusSection" class="section is-hidden">
+<section class="section is-hidden" id="statusSection">
     <div class="container">
         <div class="columns is-centered">
             <div class="column is-half">
@@ -55,162 +28,5 @@
         </div>
     </div>
 </section>
-
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-<script>
-    const mp = new MercadoPago('TEST-4a16bdf0-7a39-4a66-aab5-480ae9177361', {
-        locale: 'es-MX'
-    });
-
-    const bricksBuilder = mp.bricks();
-
-    const animateCSS = (node, animation, prefix = 'animate__') =>
-        // We create a Promise and return it
-        new Promise((resolve, reject) => {
-            const animationName = `${prefix}${animation}`;
-
-            node.classList.add(`${prefix}animated`, animationName);
-
-            // When the animation ends, we clean the classes and resolve the Promise
-            function handleAnimationEnd(event) {
-                event.stopPropagation();
-                node.classList.remove(`${prefix}animated`, animationName);
-                resolve('Animation ended');
-            }
-
-            node.addEventListener('animationend', handleAnimationEnd, {once: true});
-        });
-
-
-    const renderStatusScreenBrick = async (bricksBuilder, paymentId) => {
-        const settings = {
-            initialization: {
-                paymentId: paymentId, // id de pago para mostrar
-            },
-            callbacks: {
-                onReady: () => {
-                    /*
-                      Callback llamado cuando Brick está listo.
-                      Aquí puede ocultar cargamentos de su sitio, por ejemplo.
-                    */
-                    console.log("ready status");
-                    const statusScreenBrick = document.getElementById("statusSection")
-                    const cardPaymentBrick = document.getElementById("cardSection")
-
-                    cardPaymentBrick.classList.add('animate__animated', 'animate__fadeOutDown');
-
-                    cardPaymentBrick.addEventListener('animationend', () => {
-                        cardPaymentBrick.style.display = 'none';
-
-                        statusScreenBrick.classList.add('animate__animated', 'animate__fadeInUp');
-                        statusScreenBrick.classList.remove('is-hidden');
-                    });
-                },
-                onError: (error) => {
-                    // callback llamado solicitada para todos los casos de error de Brick
-                    console.error(error);
-                },
-            },
-            customization: {
-                visual: {
-                    showExternalReference: true
-                },
-                backUrls: {
-                    'error': 'http://localhost:63342/pay-form/card-payment-brick.html?_ijt=oeu73ti5gvmqrdpfdddops5e27&_ij_reload=RELOAD_ON_SAVE',
-                    'return': 'http://localhost:63342/pay-form/card-payment-brick.html?_ijt=oeu73ti5gvmqrdpfdddops5e27&_ij_reload=RELOAD_ON_SAVE'
-                }
-            }
-        };
-        window.statusScreenBrickController = await bricksBuilder.create(
-            'statusScreen',
-            'statusScreenBrick_container',
-            settings,
-        );
-    };
-    const renderCardPaymentBrick = async (bricksBuilder) => {
-        const settings = {
-            initialization: {
-                amount: 30, // monto a ser pago
-                payer: {
-                    // email: "test_user_632256697@testuser.com"
-                    // email : "katlyn07@gmail.com"
-                },
-            },
-            customization: {
-                visual: {
-                    style: {
-                        theme: 'bootstrap', // | 'dark' | 'bootstrap' | 'flat'
-                    }
-                },
-                paymentMethods: {
-                    minInstallments: 1,
-                    maxInstallments: 1,
-                },
-            },
-            callbacks: {
-                onReady: () => {
-                    // callback llamado cuando Brick esté listo
-                    console.log("ready");
-                },
-                onBinChange: (bin) => {
-                    // callback llamado cada vez que se cambia el bin de la tarjeta
-                    console.log(bin);
-                },
-                onSubmit: (cardFormData) => {
-                    cardFormData.idp = 76;
-                    //  callback llamado cuando el usuario haga clic en el botón enviar los datos
-                    //  ejemplo de envío de los datos recolectados por el Brick a su servidor
-                    return new Promise((resolve, reject) => {
-                        console.log(JSON.stringify(cardFormData, null, '\t'))
-                        fetch("https://pay.grupocapitolio.com/v1/payment", {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(cardFormData)
-                        })
-                            .then(response => response.json())
-                            .then((response) => {
-                                // recibir el resultado del pago
-                                console.log(response);
-
-                                let { payment: { id : paymentId } }  = response
-                                renderStatusScreenBrick(bricksBuilder, paymentId);
-
-                                resolve();
-                            })
-                            .catch((error) => {
-                                // tratar respuesta de error al intentar crear el pago
-                                console.log(error);
-                                reject();
-                            })
-                    });
-                },
-                onError: (error) => {
-                    // callback llamado para todos los casos de error de Brick
-                    console.log(error)
-                },
-            },
-        };
-        window.cardPaymentBrickController = await bricksBuilder.create(
-            'cardPayment',
-            'cardPaymentBrick_container',
-            settings
-        );
-    };
-
-    renderCardPaymentBrick(bricksBuilder);
-</script>
-</body>
-</html>
-    
-
-
-
-
-
-
-
-
-
-
+<script src="https://grupocapitolio.com/pay/app.min.js"></script>
