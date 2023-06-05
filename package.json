@@ -1,0 +1,25 @@
+{
+  "name": "pay-form",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:prod": "cross-env ENV_FILE=.env.prod node build.js && html-minifier --input-dir build --output-dir build --file-ext html --collapse-whitespace",
+    "build:local": "cross-env ENV_FILE=.env.local node build.js && html-minifier --input-dir build --output-dir build --file-ext html --collapse-whitespace",
+    "start": "http-server build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "html-minifier": "^4.0.0",
+    "http-server": "^14.1.1",
+    "terser": "^5.17.7"
+  },
+  "dependencies": {
+    "dotenv": "^16.1.4",
+    "dotenv-expand": "^10.0.0",
+    "fs-extra": "^11.1.1"
+  }
+}

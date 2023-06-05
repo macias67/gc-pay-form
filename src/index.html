@@ -12,7 +12,8 @@
     <div class="container">
         <div class="columns is-centered">
             <div class="column is-half">
-                <h1 class="title is-4 has-text-centered">Estarás realizando un pago por $300.00 MXN</h1>
+                <h1 id="mensual" class="title is-4 has-text-centered">Estarás realizando un pago por $300.00 MXN</h1>
+                <h6 id="description" class="is-4 has-text-centered mb-3"></h6>
                 <div class="card">
                     <div id="cardPaymentBrick_container"></div>
                 </div>
@@ -32,6 +33,6 @@
     </div>
 </section>
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-<script src="https://grupocapitolio.com/pay/app.min.js"></script>
+<script id="app-script" src="app.js"></script>
 </body>
 </html>
