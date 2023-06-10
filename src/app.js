@@ -31,7 +31,7 @@ const getClientInfo = async () => {
         if (data.client === null) {
             window.location.href = `${BASE_URL_FORM}`;
         }
-        // console.log(data);
+
         const {cliente, domicilio, numero, colonia, mensual = 10} = data.client;
         // Procesar los datos obtenidos de la API
         const mensualElement = document.getElementById('mensual');
