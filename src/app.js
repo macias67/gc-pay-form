@@ -24,7 +24,7 @@ const getClientInfo = async () => {
 
         const response = await fetch(`${BASE_URL_SERVICE}/v1/user?idp=${IDP}`);
         if (!response.ok) {
-            throw new Error('Error al extraer datos del cliente.');
+            console.error('Error al extraer datos del cliente:');
         }
         const data = await response.json();
 
